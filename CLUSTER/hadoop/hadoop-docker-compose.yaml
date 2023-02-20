@@ -1,0 +1,161 @@
+version: "3.9"
+services:
+  hue:
+    image: gethue/hue:latest
+    hostname: hue
+    deploy:
+      restart_policy:
+        condition: always
+    # ports:
+    #   - "18888:18888"
+    volumes:
+      - ./hue/conf/hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
+    depends_on:
+      - "namenode"
+    networks: 
+      hadoop:
+        ipv4_address: 10.1.85.225
+
+  namenode:
+    hostname: namenode
+    image: sebssekk/hadoop
+    mem_limit: 4G
+    cpu_count: 2
+    command: bash /start.sh
+    # ports:
+    #   - "2222:22" #ssh
+    #   - "9870:9870" # namenode
+    #   - "8088:8088" # yarn
+    #   - "9999:9999" # hive
+    #   - "8080:8080" # spark
+    #   - "8888:8888" # jupyter
+    #   - "18080:18080" # spark hystory server
+    #   - "16010:16010" # hbase master UI
+    #   - "12000:12000" # sqoop UI
+    #   - "9095:9095" # hbase thrift server info
+    #   - "8095:8095" # base rest server info
+    volumes:
+      - ./namenode-start.sh:/start.sh
+      - ./example-files:/home/hadoop/example-files
+      - ./flume/flume-test-conf.conf:/home/hadoop/flume-test-conf.conf
+      - ../hdfs-storage-space/namenode:/home/hadoop/hdfs/data
+      - ./hadoop/etc/workers:/opt/hadoop/etc/hadoop/workers
+      - ./hadoop/etc/masters:/opt/hadoop/etc/hadoop/masters
+      - ./hadoop/etc/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./hadoop/etc/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./hadoop/etc/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./hadoop/etc/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
+      - ./hadoop/etc/httpfs-site.xml:/opt/hadoop/etc/hadoop/httpfs-site.xml
+      - ./hive/conf/hive-site.xml:/opt/hive/conf/hive-site.xml
+      - ./spark/conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ./spark/conf/spark-env.sh:/opt/spark/conf/spark-env.sh
+      - ./spark/conf/workers:/opt/spark/conf/workers
+      - ./livy/livy.conf:/opt/livy/conf/livy.conf
+      - ./hbase/conf/regionservers:/opt/hbase/conf/regionservers
+      - ./hbase/conf/hbase-site.xml:/opt/hbase/conf/hbase-site.xml
+      - ./hbase/conf/hbase-env.sh:/opt/hbase/conf/hbase-env.sh
+      # - ./sqoop/lib/mysql-connector-java-8.0.27.jar:/opt/sqoop/server/lib/mysql-connector-java-8.0.27.jar
+      # - ./sqoop/conf/sqoop.properties:/opt/sqoop/conf/sqoop.properties
+    # depends_on:
+    #   - "zookeeper1"
+    #   - "zookeeper2"
+    #   - "zookeeper3"
+    depends_on:
+      - "mysql"
+    networks: 
+      hadoop:
+        ipv4_address: 10.1.85.220
+      
+     
+
+  datanode1:
+    hostname: datanode1
+    image: sebssekk/hadoop
+    mem_limit: 4G
+    cpu_count: 2
+    command: tail -f /dev/null
+    volumes:
+      - ../hdfs-storage-space/datanode1:/home/hadoop/hdfs/data
+      - ./hadoop/etc/workers:/opt/hadoop/etc/hadoop/workers
+      - ./hadoop/etc/masters:/opt/hadoop/etc/hadoop/masters
+      - ./hadoop/etc/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./hadoop/etc/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./hadoop/etc/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./hadoop/etc/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
+      - ./hadoop/etc/httpfs-site.xml:/opt/hadoop/etc/hadoop/httpfs-site.xml
+      - ./hbase/conf/regionservers:/opt/hbase/conf/regionservers
+      - ./hbase/conf/hbase-site.xml:/opt/hbase/conf/hbase-site.xml
+      - ./hbase/conf/hbase-env.sh:/opt/hbase/conf/hbase-env.sh
+    networks: 
+      hadoop:
+        ipv4_address: 10.1.85.221
+      
+
+  datanode2:
+    hostname: datanode2
+    image: sebssekk/hadoop
+    mem_limit: 4G
+    cpu_count: 2
+    command: tail -f /dev/null
+    volumes:
+      - ../hdfs-storage-space/datanode2:/home/hadoop/hdfs/data
+      - ./hadoop/etc/workers:/opt/hadoop/etc/hadoop/workerscd C
+      - ./hadoop/etc/masters:/opt/hadoop/etc/hadoop/masters
+      - ./hadoop/etc/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./hadoop/etc/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./hadoop/etc/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./hadoop/etc/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
+      - ./hadoop/etc/httpfs-site.xml:/opt/hadoop/etc/hadoop/httpfs-site.xml
+      - ./hbase/conf/regionservers:/opt/hbase/conf/regionservers
+      - ./hbase/conf/hbase-site.xml:/opt/hbase/conf/hbase-site.xml
+      - ./hbase/conf/hbase-env.sh:/opt/hbase/conf/hbase-env.sh
+    networks: 
+      hadoop:
+        ipv4_address: 10.1.85.222
+      
+
+  datanode3:
+    hostname: datanode3
+    image: sebssekk/hadoop
+    mem_limit: 4G
+    cpu_count: 2
+    command: tail -f /dev/null
+    volumes:
+      - ../hdfs-storage-space/datanode3:/home/hadoop/hdfs/data:rw
+      - ./hadoop/etc/workers:/opt/hadoop/etc/hadoop/workers
+      - ./hadoop/etc/masters:/opt/hadoop/etc/hadoop/masters
+      - ./hadoop/etc/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./hadoop/etc/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./hadoop/etc/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+      - ./hadoop/etc/mapred-site.xml:/opt/hadoop/etc/hadoop/mapred-site.xml
+      - ./hadoop/etc/httpfs-site.xml:/opt/hadoop/etc/hadoop/httpfs-site.xml
+      - ./hbase/conf/regionservers:/opt/hbase/conf/regionservers
+      - ./hbase/conf/hbase-site.xml:/opt/hbase/conf/hbase-site.xml
+      - ./hbase/conf/hbase-env.sh:/opt/hbase/conf/hbase-env.sh
+    networks: 
+      hadoop:
+        ipv4_address: 10.1.85.223
+      
+
+  
+  mysql:
+    hostname: mysql
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=toor
+      - MYSQL_DATABASE=hue
+    networks: 
+      hadoop:
+        ipv4_address: 10.1.85.224
+  
+networks: 
+  hadoop: 
+    driver: ipvlan
+    driver_opts:
+      parent: ens160
+      ipvlan_mode: l2
+    ipam:
+      config:
+        - subnet: 10.1.85.0/24
+          gateway: 10.1.85.254
+  

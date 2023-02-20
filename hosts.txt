@@ -1,0 +1,15 @@
+10.1.85.201 zookeeper1 
+10.1.85.202 zookeeper2 
+10.1.85.203 zookeeper3 
+
+10.1.85.211 kafka1 
+10.1.85.212 kafka2 
+10.1.85.213 kafka3 
+10.1.85.214 kafkaui 
+
+10.1.85.220 namenode
+10.1.85.221 datanode1
+10.1.85.222 datanode2
+10.1.85.223 datanode3
+10.1.85.224 mysql
+10.1.85.225 hue

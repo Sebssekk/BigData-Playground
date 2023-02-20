@@ -1,0 +1,72 @@
+{
+  "table_name":"test",
+  "schema":
+    {
+      "columns":
+        [
+          {
+            "column_name":"id",
+            "column_type":"INT32",
+            "default_value":"1"
+          },
+          {
+            "column_name":"key",
+            "column_type":"INT64",
+            "is_nullable":false,
+            "comment":"range key"
+          },
+          {
+            "column_name":"name",
+            "column_type":"STRING",
+            "is_nullable":false,
+            "comment":"user name"
+          }
+        ],
+      "key_column_names": [ "id", "key" ]
+    },
+    "partition":
+      {
+        "hash_partitions":
+          [
+            {
+              "columns":["id"],
+              "num_buckets":2,
+              "seed":100
+            }
+          ],
+        "range_partition":
+          {
+            "columns":["key"],
+            "range_bounds":
+              [
+                {
+                  "upper_bound":
+                    {
+                      "bound_type":"inclusive",
+                      "bound_values":["2"]
+                    }
+                },
+                {
+                  "lower_bound": 
+                    {
+                      "bound_type":"exclusive",
+                      "bound_values": ["2"]
+                    },
+                  "upper_bound":
+                    {
+                      "bound_type":"inclusive",
+                      "bound_values":["3"]
+                    }
+                }
+              ]
+          }
+      },
+    "extra_configs":
+      {
+        "configs":
+          {
+            "kudu.table.history_max_age_sec":"3600"
+          }
+      },
+    "num_replicas":3
+}

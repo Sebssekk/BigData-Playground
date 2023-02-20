@@ -1,0 +1,9 @@
+CLUSTER/hdfs-storage-space/namenode/*
+CLUSTER/hdfs-storage-space/datanode1/*
+CLUSTER/hdfs-storage-space/datanode2/*
+CLUSTER/hdfs-storage-space/datanode3/*
+.gitToken
+*.docx
+*.OLD
+*.DEPRECATED
+*.tgz

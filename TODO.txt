@@ -1,0 +1,7 @@
+> Customize kudu and Impala Docker image
+> move from docker-compose to kubernetes
+> finish the HUE configuration
+> adding other services like oozie
+> write a good readme
+> write a guide for exercises
+> ...

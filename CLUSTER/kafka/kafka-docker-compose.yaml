@@ -1,0 +1,73 @@
+version: "3.9"
+services:  
+  kafka1:
+    hostname: kafka1
+    image: sebssekk/kafka-alpine
+    # ports:
+    #   - "9092:9092"
+    volumes:
+      - ./config/server1.properties:/opt/kafka/config/server.properties
+    # depends_on:
+    #   - "zookeeper1"
+    #   - "zookeeper2"
+    #   - "zookeeper3"
+    networks: 
+      kafka:
+        ipv4_address: 10.1.85.211
+      #default: {}
+  kafka2:
+    hostname: kafka2
+    image: sebssekk/kafka-alpine
+    # ports:
+    #   - "9092:9092"
+    volumes:
+      - ./config/server2.properties:/opt/kafka/config/server.properties
+    # depends_on:
+    #   - "zookeeper1"
+    #   - "zookeeper2"
+    #   - "zookeeper3"
+    networks: 
+      kafka:
+        ipv4_address: 10.1.85.212
+  kafka3:
+    hostname: kafka3
+    image: sebssekk/kafka-alpine
+    # ports:
+    #   - "9092:9092"
+    volumes:
+      - ./config/server3.properties:/opt/kafka/config/server.properties
+    # depends_on:
+    #   - "zookeeper1"
+    #   - "zookeeper2"
+    #   - "zookeeper3"
+    networks: 
+      kafka:
+        ipv4_address: 10.1.85.213
+      #default: {}
+  kafkaui:
+    hostname: kafkaui
+    image: provectuslabs/kafka-ui:master
+    # ports:
+    #   - "9000:9000"
+    environment:
+      - KAFKA_./CLUSTER_0_NAME=local
+      - KAFKA_./CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:9092,kafka2:9092,kafka3:9092
+      - KAFKA_./CLUSTERS_0_ZOOKEEPER=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      - SERVER_PORT=9000
+    depends_on:
+      - "kafka1"
+      - "kafka2"
+      - "kafka3"
+    networks: 
+      kafka:
+        ipv4_address: 10.1.85.214
+networks: 
+  kafka: 
+    driver: macvlan
+    driver_opts:
+      parent: ens160
+      #ipvlan_mode: l2
+    ipam:
+      config:
+        - subnet: 10.1.85.0/24
+          gateway: 10.1.85.254
